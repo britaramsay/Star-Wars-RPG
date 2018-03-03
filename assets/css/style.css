@@ -1,0 +1,19 @@
+.availableChars, .opponents, .opponent {
+    margin-right: 40px;
+    border: 2px solid black;
+    float: left;
+}
+
+
+.available {
+    clear: both;
+    float: left;
+}
+
+.available h3 {
+    clear: both;
+}
+
+.defender {
+    clear: both;
+}
