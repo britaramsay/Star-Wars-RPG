@@ -12,25 +12,16 @@ var player;
 
 $(document).ready(function() {
 
-
     mkDivs();
-    // playGame();
-    // console.log(player);
 
 });
 
 function mkDivs() {
     for(var i = 0; i < opps.length; i++) {
+
         var chars = $("<div>");
 
-        chars.append($("<p>").text(opps[i].name))
-            .prepend($('<img>',{id:'theImg',src:opps[i].image}))
-            .append($("<p>").text(opps[i].hp))
-            .addClass("availableChars")
-            .attr("data-name", opps[i].name)
-            .attr("data-hp", opps[i].hp)
-            .attr("data-role", opps[i].role)
-            .css("float", "left");
+        makeDiv(chars, opps[i],"availableChars");
 
         $(".characters").append(chars);
     }
@@ -40,42 +31,28 @@ function mkDivs() {
         $(this).attr("data-role", "player");
               
         $(".characters").empty();
-        var chars = $("<div>");
+
         var yourChar = $("<div>");
         var opp  =$("<div>");
+        
         for(var i = 0; i < opps.length; i++) {
            
-    
+            var chars = $("<div>");
+
             if(opps[i].name !== $(this).attr("data-name")) {
-                chars.append($("<p>").text(opps[i].name))
-                    .prepend($('<img>',{id:'theImg',src:opps[i].image}))
-                    .append($("<p>").text(opps[i].hp))
-                    .addClass("opponents")
-                    .attr("data-name", opps[i].name)
-                    .attr("data-hp", opps[i].hp)
-                    .attr("data-role", opps[i].role)
-                    .css("float", "left");
+
+                makeDiv(chars, opps[i], "opponents");
         
                 $(".available").append(chars);
-        
            }
   
            // else
            if(opps[i].name === $(this).attr("data-name")) {
                 player = opps[i];
-                // console.log(player);
 
                 $(".yourChar").append("<h3>Your Character</h3>");
+                makeDiv(yourChar, player, "availableChars");
 
-                yourChar.append($("<p>").text(opps[i].name))
-                    .prepend($('<img>',{id:'theImg',src:opps[i].image}))
-                    .append($("<p>").text(opps[i].hp))
-                    .addClass("availableChars")
-                    .attr("data-name", opps[i].name)
-                    .attr("data-hp", opps[i].hp)
-                    .attr("data-role", opps[i].role)
-                    .css("float", "left");
-        
                 $(".yourChar").append(yourChar);
             }
         }
@@ -94,72 +71,31 @@ function mkDivs() {
                     
                     opponent = opps[i];
 
-                    opp.append($("<p>").text(opponent.name))
-                        .prepend($('<img>',{id:'theImg',src:opps[i].image}))
-                        .append($("<p>").text(opponent.hp))
-                        .addClass("opponent")
-                        .attr("data-name", opps[i].name)
-                        .attr("data-hp", opponent.hp)
-                        .attr("data-role", opps[i].role)
-                        .css("float", "left");
+                    makeDiv(opp, opponent, "opponent");
             
                     $(".defender").append(opp);
                 }
 
                 else if(opps[i] !== player){
-                    waiting.append($("<p>").text(opps[i].name))
-                        .prepend($('<img>',{id:'theImg',src:opps[i].image}))
-                        .append($("<p>").text(opps[i].hp))
-                        .addClass("opponents")
-                        .attr("data-name", opps[i].name)
-                        .attr("data-hp", opps[i].hp)
-                        .attr("data-role", opps[i].role)
-                        .css("float", "left");
+
+                    makeDiv(waiting, opps[i], "opponents");
             
                     $(".available").append(waiting);
                }
             }
             $(".attack").on("click", function() {
                 if(player.hp > 0 && opponent.hp > 0) {
-
-                console.log(player, opponent);
-                //  while neither has hp = 0
-                //  counter increment each time
-                //  if even player attack, if odd opponent attacks
-    
-                opp.empty();
-
-                // player attacks
-                opponent.hp -= player.baseAttack;
-                player.baseAttack *= 2;
-
-                opp.append($("<p>").text(opponent.name))
-                    .prepend($('<img>',{id:'theImg',src:opponent.image}))
-                    .append($("<p>").text(opponent.hp))
-                    .addClass("opponent")
-                    // .attr("data-name", opps[i].name)
-                    // .attr("data-hp", opponent.hp)
-                    // .attr("data-role", opps[i].role)
-                    .css("float", "left");
         
-                $(".defender").append(opp);
-                    // opponent attacks
+                    opp.empty();
+                    opponent.hp -= player.baseAttack;
+                    player.baseAttack *= 2;
+                    makeDiv(opp, opponent, "opponent");
+                    $(".defender").append(opp);
 
-                yourChar.empty();
-
-                player.hp -= opponent.baseAttack;
-
-                yourChar.append($("<p>").text(player.name))
-                    .prepend($('<img>',{id:'theImg',src:player.image}))
-                    .append($("<p>").text(player.hp))
-                    .addClass("availableChars")
-                    // .attr("data-name", opps[i].name)
-                    // .attr("data-hp", opps[i].hp)
-                    // .attr("data-role", opps[i].role)
-                    .css("float", "left");
-        
-                $(".yourChar").append(yourChar);
-            
+                    yourChar.empty();
+                    player.hp -= opponent.baseAttack;
+                    makeDiv(yourChar, player, "availableChars");
+                    $(".yourChar").append(yourChar);
             
                 }
     
@@ -174,13 +110,13 @@ function mkDivs() {
     })
 }
 
-
-var counter = 0;
-
-// function playGame(player, opponent) {
-         
-    
-
-// }
-
-
+function makeDiv(div, characterf, setClass) {
+    div.append($("<p>").text(characterf.name))
+        .prepend($('<img>',{id:'theImg',src:characterf.image}))
+        .append($("<p>").text(characterf.hp))
+        .addClass(setClass)
+        .attr("data-name", characterf.name)
+        .attr("data-hp", characterf.hp)
+        .attr("data-role", characterf.role)
+        .css("float", "left");
+}
