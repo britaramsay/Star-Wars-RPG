@@ -19,7 +19,6 @@ p {
 
 .availableChars, .opponents, .opponent {
     margin-right: 40px;
-    /* border: 2px solid black; */
     float: left;
 }
 
@@ -39,4 +38,5 @@ p {
 
 .container img {
     width: 200px;
+    box-shadow: 2px 2px 8px rgb(29, 13, 10);
 }
