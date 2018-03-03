@@ -1,6 +1,25 @@
+body {
+    background: url("../images/background.jpg");
+}
+
+h1 {
+    color: rgb(221, 151, 59);
+    text-shadow: 2px 2px 8px rgb(255, 30, 0);
+}
+
+h3 {
+    color: rgb(221, 151, 59);
+    text-shadow: 2px 2px 8px rgb(255, 30, 0);
+}
+
+p {
+    color: rgb(221, 151, 59);
+    text-shadow: 2px 2px 8px rgb(255, 30, 0);
+}
+
 .availableChars, .opponents, .opponent {
     margin-right: 40px;
-    border: 2px solid black;
+    /* border: 2px solid black; */
     float: left;
 }
 
@@ -16,4 +35,8 @@
 
 .defender {
     clear: both;
+}
+
+.container img {
+    width: 200px;
 }

@@ -1,17 +1,20 @@
-var opps = [{name: "Obi-Wan Kenobi", hp: "120", role: "", image: "../images/obiwankenobi.jpg"},
-            {name: "Luke Skywalker", hp: "100", role: "", image: "../images/lukeskywalker.jpg"},
-            {name: "Darth Sidious", hp: "150", role: "", image: "../images/darth.jpg"},
-            {name: "Darth Maul", hp: "180", role: "", image: "../images/maul.jpg"}];
+var opps = [{name: "Obi-Wan Kenobi", hp: "120", role: "", image: "assets/images/obiwankenobi.jpg"},
+            {name: "Luke Skywalker", hp: "100", role: "", image: "assets/images/lukeskywalker.jpg"},
+            {name: "Darth Sidious", hp: "150", role: "", image: "assets/images/darth.jpg"},
+            {name: "Darth Maul", hp: "180", role: "", image: "assets/images/maul.jpg"}];
 
-var char;
 var hp;
 var opponent;
 var oppHP;
+
+var player;
+
 
 $(document).ready(function() {
 
 
     mkDivs();
+    playGame();
 
 });
 
@@ -20,7 +23,7 @@ function mkDivs() {
         var chars = $("<div>");
 
         chars.append($("<p>").text(opps[i].name))
-            // .prepend($('<img>',{id:'theImg',src:'../images/darth.jpg'}))
+            .prepend($('<img>',{id:'theImg',src:opps[i].image}))
             .append($("<p>").text(opps[i].hp))
             .addClass("availableChars")
             .attr("data-name", opps[i].name)
@@ -32,7 +35,6 @@ function mkDivs() {
     }
 
     $(".availableChars").on("click", function () {
-        var player;
         
         $(this).attr("data-role", "player");
               
@@ -45,7 +47,7 @@ function mkDivs() {
     
             if(opps[i].name !== $(this).attr("data-name")) {
                 chars.append($("<p>").text(opps[i].name))
-                    // .prepend($('<img>',{id:'theImg',src:'../images/darth.jpg'}))
+                    .prepend($('<img>',{id:'theImg',src:opps[i].image}))
                     .append($("<p>").text(opps[i].hp))
                     .addClass("opponents")
                     .attr("data-name", opps[i].name)
@@ -64,7 +66,7 @@ function mkDivs() {
                 $(".yourChar").append("<h3>Your Character</h3>");
 
                 yourChar.append($("<p>").text(opps[i].name))
-                    // .prepend($('<img>',{id:'theImg',src:'../images/darth.jpg'}))
+                    .prepend($('<img>',{id:'theImg',src:opps[i].image}))
                     .append($("<p>").text(opps[i].hp))
                     .addClass("availableChars")
                     .attr("data-name", opps[i].name)
@@ -76,7 +78,6 @@ function mkDivs() {
     
             }
         }
-
         $(".opponents").on("click", function() {
             
             $(".available").empty();
@@ -89,9 +90,11 @@ function mkDivs() {
                 var waiting = $("<div>");
 
                 if(opps[i].name === $(this).attr("data-name")) {
-    
+                    
+                    opponent = opps[i];
+
                     opp.append($("<p>").text(opps[i].name))
-                        // .prepend($('<img>',{id:'theImg',src:'../images/darth.jpg'}))
+                        .prepend($('<img>',{id:'theImg',src:opps[i].image}))
                         .append($("<p>").text(opps[i].hp))
                         .addClass("opponent")
                         .attr("data-name", opps[i].name)
@@ -104,7 +107,7 @@ function mkDivs() {
 
                 else if(opps[i] !== player){
                     waiting.append($("<p>").text(opps[i].name))
-                        // .prepend($('<img>',{id:'theImg',src:'../images/darth.jpg'}))
+                        .prepend($('<img>',{id:'theImg',src:opps[i].image}))
                         .append($("<p>").text(opps[i].hp))
                         .addClass("opponents")
                         .attr("data-name", opps[i].name)
@@ -112,7 +115,6 @@ function mkDivs() {
                         .attr("data-role", opps[i].role)
                         .css("float", "left");
             
-                    
                     $(".available").append(waiting);
                }
             }
@@ -121,5 +123,35 @@ function mkDivs() {
 
     
     
+    
 }
+var counter = 0;
+
+// function playGame() {
+//     while(player.hp !== 0 || opponent.hp !== 0) {
+//     $(".attack").on("click", function() {
+//         console.log(player.hp);
+//         // while neither has hp = 0
+//         // counter increment each time
+//         // if even player attack, if odd opponent attacks
+
+
+        
+//             if(counter % 2 == 0) {
+//                 // player attacks
+//                 opponent.hp -= 10;
+//             }
+//             else {
+//                 // opponent attacks
+//                 player.hp -= 10;
+//             }
+//             counter++;
+        
+
+
+//     });
+// }
+
+//}
+
 
