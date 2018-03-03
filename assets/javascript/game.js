@@ -1,7 +1,7 @@
-var opps = [{name: "Obi-Wan Kenobi", hp: "120", role: "", image: "assets/images/obiwankenobi.jpg"},
-            {name: "Luke Skywalker", hp: "100", role: "", image: "assets/images/lukeskywalker.jpg"},
-            {name: "Darth Sidious", hp: "150", role: "", image: "assets/images/darth.jpg"},
-            {name: "Darth Maul", hp: "180", role: "", image: "assets/images/maul.jpg"}];
+var opps = [{name: "Obi-Wan Kenobi", hp: "120", role: "", baseAttack: 9 , image: "assets/images/obiwankenobi.jpg"},
+            {name: "Luke Skywalker", hp: "100", role: "", baseAttack: 7 , image: "assets/images/lukeskywalker.jpg"},
+            {name: "Darth Sidious", hp: "150", role: "", baseAttack: 8 , image: "assets/images/darth.jpg"},
+            {name: "Darth Maul", hp: "180", role: "", baseAttack: 5 , image: "assets/images/maul.jpg"}];
 
 var hp;
 var opponent;
@@ -120,7 +120,7 @@ function mkDivs() {
                }
             }
             $(".attack").on("click", function() {
-                if(player.hp !== 0 && opponent.hp !== 0) {
+                if(player.hp > 0 && opponent.hp > 0) {
 
                 console.log(player, opponent);
                 //  while neither has hp = 0
@@ -130,8 +130,9 @@ function mkDivs() {
                 opp.empty();
 
                 // player attacks
-                opponent.hp -= 10;
-            //  $(".defender").empty();
+                opponent.hp -= player.baseAttack;
+                player.baseAttack *= 2;
+
                 opp.append($("<p>").text(opponent.name))
                     .prepend($('<img>',{id:'theImg',src:opponent.image}))
                     .append($("<p>").text(opponent.hp))
@@ -146,9 +147,7 @@ function mkDivs() {
 
                 yourChar.empty();
 
-                player.hp -= 10;
-
-                // $(".yourChar").append("<h3>Your Character</h3>");
+                player.hp -= opponent.baseAttack;
 
                 yourChar.append($("<p>").text(player.name))
                     .prepend($('<img>',{id:'theImg',src:player.image}))
