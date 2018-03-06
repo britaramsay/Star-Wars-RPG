@@ -19,6 +19,8 @@ $(document).ready(function() {
 });
 
 function mkDivs() {
+    $(".characters").append("<h3>Choose a character to play as!</h3>")
+
     for(var i = 0; i < opps.length; i++) {
         // Add all character to select from
         var chars = $("<div>");
@@ -39,6 +41,7 @@ function chooseChar(){
 
         var yourChar = $("<div>");
         
+        $(".available").append("<h3>Choose an Opponent.</h3>");
         for(var i = 0; i < opps.length; i++) {
            
             var chars = $("<div>");
@@ -53,6 +56,7 @@ function chooseChar(){
            // else
            if(opps[i].name === $(this).attr("data-name")) {
                 player = opps[i];
+                var initCharAttack = player.baseAttack; 
                 // Show your character
                 $(".yourChar").append("<h3>Your Character</h3>");
                 makeDiv(yourChar, player, "availableChars");
@@ -60,66 +64,70 @@ function chooseChar(){
                 $(".yourChar").append(yourChar);
             }
         }
-        console.log(player);
-
         var opp = $("<div>");
-
         // to make divs
         chooseOpponent(opp);
-        attack(opp, yourChar, player);
+        attack(opp, yourChar, player, initCharAttack);
 
     });
 }
 
 function chooseOpponent(opp) {
 
-    console.log("chooseOpp");
+    $(".opponents").on("click", function() {
+        console.log($(this).attr("data-name"));
 
-        // need to repeat this
-        $(".opponents").on("click", function() {
-            
-            $(".available").empty();
-            $(".available").append("<h3>Ememies Available to Attack</h3>");
-            $(".available").append("<h3>Fight Selection</h3>");
+        $(".available").empty();
+        $(".available").append("<h3>Ememies Available to Attack</h3>");
 
-            for(var i = 0; i < opps.length; i++) {
-                // console.log(opps[i].role);
+        for(var i = 0; i < opps.length; i++) {
 
-                var waiting = $("<div>");
+            var waiting = $("<div>");
 
-                if(opps[i].name === $(this).attr("data-name")) {
-                    
-                    opponent = "";
-                    console.log("hi");
-                    opponent = opps[i];
-                    // Show opponent
-                    makeDiv(opp, opponent, "opponent");
-            
-                    $(".defender").append(opp);
+            console.log(opps[i].name + " : " + $(this).attr("data-name"));
+
+            if(opps[i].name === $(this).attr("data-name")) {
+                
+                opponent = "";
+                opponent = opps[i];
+                // Show opponent
+
+                if(opps[i].hp > 0) {
+                    opp.empty();
+                    // $(".defender").empty();
+                    console.log("hi"  + opps[i].hp);
+
+                    makeDiv(opp, opps[i], "opponent");
                 }
-
-                else if(opps[i] !== player && opps[i].hp > 0){
-
-                    makeDiv(waiting, opps[i], "opponents");
-                    // Show rest
-                    $(".available").append(waiting);
-
-               }
+                
+                $(".defender").append("<h3>Defender</h3>");
+                $(".defender").append(opp);
             }
-       
-        });// end
+
+            else if(opps[i] !== player && opps[i].hp > 0){
+
+                makeDiv(waiting, opps[i], "opponents");
+                // Show rest
+                $(".available").append(waiting);
+
+            }
+        }
+
+
+    });
 }
 
-function attack(opp, yourChar, player) {
+function attack(opp, yourChar, player, initCharAttack) {
     
     $(".attack").on("click", function() {
         console.log("atack");
 
+        
         if(player.hp > 0 && opponent.hp > 0) {
 
             opp.empty();
             opponent.hp -= player.baseAttack;
-            player.baseAttack *= 2;
+            player.baseAttack += initCharAttack;
             makeDiv(opp, opponent, "opponent");
             $(".defender").append(opp);
 
@@ -127,59 +135,26 @@ function attack(opp, yourChar, player) {
             player.hp -= opponent.baseAttack;
             makeDiv(yourChar, player, "availableChars");
             $(".yourChar").append(yourChar);
+
+            if(player.hp <= 0) {
+                alert("GAME OVER");
+            }
+            else if (opponent.hp <= 0){
+                // Choose another opponent
+                $(".defender").empty();
     
+                chooseOpponent(opp);
+                attack(opp, yourChar, player, initCharAttack);
+
+            }
         }
-        else if(player.hp <= 0) {
-            alert("GAME OVER");
-        }
-        else {
-            // Choose another opponent
-            $(".defender").empty();
-
-            chooseOpponent(opp);
-
-            // $(".available").on("click", function () {
-            //     console.log( "\n"+ "clicked: " + $(this).attr("data-name"));
-
-            //     $(".available").empty();
-            //     $(".available").append("<h3>Ememies Available to Attack</h3>");
-            //     $(".available").append("<h3>Fight Selection</h3>");
-
-            //     for(var i = 0; i < opps.length; i++) {
-            //         var waiting = $("<div>");
-            //         var opp  =$("<div>");
-
-
-            //         if(opps[i].hp > 0){
-
-            //             if(opps[i].name === $(this).attr("data-name")) {
-            //                 console.log("byeee");
-
-            //                 opponent = opps[i];
         
-            //                 makeDiv(opp, opponent, "opponent");
-                    
-            //                 $(".defender").append(opp);
-            //             }
-        
-            //             else if(opps[i] !== player){
-            //                 console.log("bye");
-
-            //                 makeDiv(waiting, opps[i], "opponents");
-                    
-            //                 $(".available").append(waiting);
-            //             }
-            //         }
-            //     }
-
-            // });
-
-        }
-
      });
 }
 
 function makeDiv(div, characterf, setClass) {
+    console.log("mkdiv" + characterf.name);
+
     div.append($("<p>").text(characterf.name))
         .prepend($('<img>',{id:'theImg',src:characterf.image}))
         .append($("<p>").text(characterf.hp))
