@@ -5,6 +5,7 @@ body {
 h1 {
     color: rgb(221, 151, 59);
     text-shadow: 2px 2px 8px rgb(255, 30, 0);
+    float: left;
 }
 
 h3 {
@@ -13,15 +14,26 @@ h3 {
 }
 
 p {
-    color: rgb(221, 151, 59);
-    text-shadow: 2px 2px 8px rgb(255, 30, 0);
+    color: rgb(243, 243, 224);
+    text-shadow: 2px 2px 8px rgb(233, 118, 114);
+}
+
+.attack {
+    float: left;
+    margin-top: 20px;    
+}
+
+.characters h3 {
+    clear: both;
 }
 
 .availableChars, .opponents, .opponent {
     margin-right: 40px;
+    background: rgba(36, 35, 35, 0.8);
+    padding: 10px;
     float: left;
+    border-radius: 15px;
 }
-
 
 .available {
     clear: both;
@@ -38,5 +50,7 @@ p {
 
 .container img {
     width: 200px;
-    box-shadow: 2px 2px 8px rgb(29, 13, 10);
+    box-shadow: 1px 1px 8px rgb(61, 61, 61);
+    margin-bottom: 5px;
+    border-radius: 10px;
 }
