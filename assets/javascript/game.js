@@ -1,28 +1,32 @@
-var opps = [{name: "Obi-Wan Kenobi", hp: "120", role: "", baseAttack: 3 , image: "assets/images/obiwankenobi.jpg"},
-            {name: "Luke Skywalker", hp: "100", role: "", baseAttack: 4 , image: "assets/images/lukeskywalker.jpg"},
-            {name: "Darth Sidious", hp: "150", role: "", baseAttack: 6 , image: "assets/images/darth.jpg"},
-            {name: "Darth Maul", hp: "180", role: "", baseAttack: 5 , image: "assets/images/maul.jpg"}];
+var opps = [{name: "Obi-Wan Kenobi", baseHP: 120, hp: 120, role: "", baseAttack: 3 , image: "assets/images/obiwankenobi.jpg"},
+            {name: "Luke Skywalker", baseHP: 100, hp: 100, role: "", baseAttack: 4 , image: "assets/images/lukeskywalker.jpg"},
+            {name: "Darth Sidious", baseHP: 150, hp: 150, role: "", baseAttack: 6 , image: "assets/images/darth.jpg"},
+            {name: "Darth Maul", baseHP: 180, hp: 180, role: "", baseAttack: 5 , image: "assets/images/maul.jpg"}];
 
 var hp;
 var opponent;
 var oppHP;
+var oppsLeft;
 
 var player;
 
 
 $(document).ready(function() {
+    newGame();
+});
 
+function newGame() {
+    console.log("new");
     mkDivs();
     chooseChar();
-
-
-});
+}
 
 function mkDivs() {
     $(".characters").append("<h3>Choose a character to play as!</h3>")
 
     for(var i = 0; i < opps.length; i++) {
         // Add all character to select from
+        opps[i].hp = opps[i].baseHP;
         var chars = $("<div>");
 
         makeDiv(chars, opps[i],"availableChars");
@@ -36,9 +40,9 @@ function chooseChar(){
     $(".availableChars").on("click", function () {
         
         $(this).attr("data-role", "player");
-              
+        
         $(".characters").empty();
-
+        $(".yourChar").empty();
         var yourChar = $("<div>");
         
         $(".available").append("<h3>Choose an Opponent.</h3>");
@@ -56,7 +60,8 @@ function chooseChar(){
            // else
            if(opps[i].name === $(this).attr("data-name")) {
                 player = opps[i];
-                var initCharAttack = player.baseAttack; 
+
+                charAttack = player.baseAttack; 
                 // Show your character
                 $(".yourChar").append("<h3>Your Character</h3>");
                 makeDiv(yourChar, player, "availableChars");
@@ -67,7 +72,9 @@ function chooseChar(){
         var opp = $("<div>");
         // to make divs
         chooseOpponent(opp);
-        attack(opp, yourChar, player, initCharAttack);
+
+
+        attack(opp, yourChar, player, charAttack);
 
     });
 }
@@ -75,29 +82,22 @@ function chooseChar(){
 function chooseOpponent(opp) {
 
     $(".opponents").on("click", function() {
-        console.log($(this).attr("data-name"));
+        oppsLeft = false;
 
         $(".available").empty();
-        $(".available").append("<h3>Ememies Available to Attack</h3>");
 
         for(var i = 0; i < opps.length; i++) {
-
             var waiting = $("<div>");
-
-            console.log(opps[i].name + " : " + $(this).attr("data-name"));
 
             if(opps[i].name === $(this).attr("data-name")) {
                 
-                opponent = "";
                 opponent = opps[i];
                 // Show opponent
 
                 if(opps[i].hp > 0) {
                     opp.empty();
-                    // $(".defender").empty();
-                    console.log("hi"  + opps[i].hp);
 
-                    makeDiv(opp, opps[i], "opponent");
+                    makeDiv(opp, opponent, "opponent");
                 }
                 
                 $(".defender").append("<h3>Defender</h3>");
@@ -105,29 +105,34 @@ function chooseOpponent(opp) {
             }
 
             else if(opps[i] !== player && opps[i].hp > 0){
-
+                oppsLeft = true;
                 makeDiv(waiting, opps[i], "opponents");
                 // Show rest
                 $(".available").append(waiting);
 
             }
+            
         }
-
-
+        if(oppsLeft)
+            $(".available").prepend("<h3>Ememies Available to Attack</h3>");
+   
     });
 }
 
-function attack(opp, yourChar, player, initCharAttack) {
+function attack(opp, yourChar, player, charAttack) {
     
     $(".attack").on("click", function() {
-        console.log("atack");
-
+        console.log(player.name);
         
         if(player.hp > 0 && opponent.hp > 0) {
+            $(".yourChar").empty();
+            $(".yourChar").append("<h3>Your Character</h3>");
+            $(".defender").empty();
+            $(".defender").append("<h3>Defender</h3>");
 
             opp.empty();
-            opponent.hp -= player.baseAttack;
-            player.baseAttack += initCharAttack;
+            opponent.hp -= charAttack;
+            charAttack += player.baseAttack;
             makeDiv(opp, opponent, "opponent");
             $(".defender").append(opp);
 
@@ -137,15 +142,24 @@ function attack(opp, yourChar, player, initCharAttack) {
             $(".yourChar").append(yourChar);
 
             if(player.hp <= 0) {
-                alert("GAME OVER");
+                alert("GAME OVER.");
+                player = "";
+                $(".yourChar").empty();
+                $(".defender").empty();
+                newGame();
             }
             else if (opponent.hp <= 0){
                 // Choose another opponent
                 $(".defender").empty();
-    
-                chooseOpponent(opp);
-                attack(opp, yourChar, player, initCharAttack);
-
+                if(oppsLeft)
+                    chooseOpponent(opp);
+                else {
+                    alert("YOU WIN!");
+                    player = "";
+                    $(".yourChar").empty();
+                    $(".defender").empty();
+                    newGame();
+                }
             }
         }
         
@@ -153,8 +167,6 @@ function attack(opp, yourChar, player, initCharAttack) {
 }
 
 function makeDiv(div, characterf, setClass) {
-    console.log("mkdiv" + characterf.name);
-
     div.append($("<p>").text(characterf.name))
         .prepend($('<img>',{id:'theImg',src:characterf.image}))
         .append($("<p>").text(characterf.hp))
