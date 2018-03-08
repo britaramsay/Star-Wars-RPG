@@ -1,5 +1,6 @@
 body {
     background: url("../images/background.jpg");
+    background-size: 100% 100;
 }
 
 h1 {
@@ -27,12 +28,21 @@ p {
     clear: both;
 }
 
+.characters img {
+    border: 2px solid red;
+}
+
 .availableChars, .opponents, .opponent {
     margin-right: 40px;
+    margin-bottom: 10px;
     background: rgba(36, 35, 35, 0.8);
     padding: 10px;
     float: left;
     border-radius: 15px;
+}
+
+.yourChar img{
+    border: 2px solid yellow;
 }
 
 .available {
@@ -44,8 +54,16 @@ p {
     clear: both;
 }
 
+.available img {
+    border: 2px solid green;
+}
+
 .defender {
     clear: both;
+}
+
+.defender img {
+    border: 2px solid orangered;
 }
 
 .container img {
